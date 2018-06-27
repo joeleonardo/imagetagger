@@ -54,7 +54,7 @@
                     <Label Content="File List" HorizontalAlignment="Left" Margin="10,372,0,0" VerticalAlignment="Top"/>
                     <ListBox x:Name="review_lb_file_list" HorizontalAlignment="Left" Height="300" Margin="10,398,0,0" VerticalAlignment="Top" Width="280" SelectionChanged="review_lb_file_list_SelectionChanged"/>
                     <Image x:Name="review_image" Grid.Column="1" HorizontalAlignment="Left" Height="821" Margin="10,10,0,0" VerticalAlignment="Top" Width="1266"/>
-                    <ListBox x:Name="review_lb_applied_tags" HorizontalAlignment="Left" Height="200" Margin="10,167,0,0" VerticalAlignment="Top" Width="280" Loaded="review_lb_applied_tags_Loaded"/>
+                    <ListBox x:Name="review_lb_applied_tags" HorizontalAlignment="Left" Height="200" Margin="10,167,0,0" VerticalAlignment="Top" Width="280" Loaded="review_lb_applied_tags_Loaded" MouseLeftButtonUp="review_lb_applied_tags_MouseLeftButtonUp"/>
                     <Button x:Name="review_btn_clear" Content="Clear" HorizontalAlignment="Left" Height="64" Margin="10,720,0,0" VerticalAlignment="Top" Width="182" Click="review_btn_clear_Click"/>
                 </Grid>
             </TabItem>

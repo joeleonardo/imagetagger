@@ -209,12 +209,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="D:\OokaiDialogs\src\Ookii.Dialogs.Wpf\Ookii.Dialogs.Wpf.csproj">
-      <Project>{d01b1d20-8f5b-4834-8e5c-c7ec6dd587d4}</Project>
-      <Name>Ookii.Dialogs.Wpf</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="Database.mdf">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -244,6 +238,12 @@
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Ookii.Dialogs.Wpf\Ookii.Dialogs.Wpf.csproj">
+      <Project>{d01b1d20-8f5b-4834-8e5c-c7ec6dd587d4}</Project>
+      <Name>Ookii.Dialogs.Wpf</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

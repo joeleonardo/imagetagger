@@ -324,5 +324,15 @@ namespace ImageReviewer
 
             this.review_lb_applied_tags.Items.Clear();
         }
+
+        private void review_lb_applied_tags_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            if (Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl))
+            {
+                System.Windows.Controls.ListBox listBox = (System.Windows.Controls.ListBox)sender;
+                if (listBox.SelectedIndex == -1) { return; }
+                listBox.Items.RemoveAt(listBox.SelectedIndex);
+            }
+        }
     }
 }
