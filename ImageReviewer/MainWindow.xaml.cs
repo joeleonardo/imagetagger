@@ -91,7 +91,6 @@ namespace ImageReviewer
 
             try
             {
-                Console.WriteLine(this.list_files.SelectedIndex);
                 var file = this.list_files.SelectedItem.ToString();
 
                 if (file is null) { return; }
@@ -192,7 +191,7 @@ namespace ImageReviewer
             {
                 System.Windows.Controls.ListBox listBox = (System.Windows.Controls.ListBox)sender;       
                 
-                if (listBox.SelectedIndex != -1) { return; }
+                if (listBox.SelectedIndex == -1) { return; }
                 string tagName = (string)listBox.SelectedValue;
                 
 
@@ -306,6 +305,15 @@ namespace ImageReviewer
 
                 this.review_image.Source = bitmapImage;
                 this.entry_tag_name.IsEnabled = true;
+
+                var imageid = Utils.GetExistingImageId(file);
+                var tags = Utils.GetTags(imageid);
+
+                this.review_lb_selected_image_tags.Items.Clear();
+                foreach (var tag in tags)
+                {
+                    this.review_lb_selected_image_tags.Items.Add(tag.TagName);
+                }
             }
             catch (Exception exc)
             {
@@ -323,6 +331,8 @@ namespace ImageReviewer
             }
 
             this.review_lb_applied_tags.Items.Clear();
+            this.review_lb_selected_image_tags.Items.Clear();
+            this.review_image.Source = null;
         }
 
         private void review_lb_applied_tags_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
