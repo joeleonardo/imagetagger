@@ -138,6 +138,15 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Artist.cs">
+      <DependentUpon>Schema.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Collection.cs">
+      <DependentUpon>Schema.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CollectionPage.cs">
+      <DependentUpon>Schema.tt</DependentUpon>
+    </Compile>
     <Compile Include="Image.cs">
       <DependentUpon>Schema.tt</DependentUpon>
     </Compile>
@@ -210,10 +219,10 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Database.mdf">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Database_log.ldf">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <DependentUpon>Database.mdf</DependentUpon>
     </Content>
     <Resource Include="if_Food_C207_2427857.ico" />

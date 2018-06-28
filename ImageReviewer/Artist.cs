@@ -12,18 +12,18 @@ namespace ImageReviewer
     using System;
     using System.Collections.Generic;
     
-    public partial class Tag
+    public partial class Artist
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Tag()
+        public Artist()
         {
-            this.ImageTags = new HashSet<ImageTag>();
+            this.Images = new HashSet<Image>();
         }
     
         public int Id { get; set; }
         public string Name { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<ImageTag> ImageTags { get; set; }
+        public virtual ICollection<Image> Images { get; set; }
     }
 }

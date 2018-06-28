@@ -25,8 +25,11 @@ namespace ImageReviewer
             throw new UnintentionalCodeFirstException();
         }
     
-        public virtual DbSet<Image> Image { get; set; }
-        public virtual DbSet<Tag> Tag { get; set; }
-        public virtual DbSet<ImageTag> ImageTag { get; set; }
+        public virtual DbSet<Image> Images { get; set; }
+        public virtual DbSet<Tag> Tags { get; set; }
+        public virtual DbSet<ImageTag> ImageTags { get; set; }
+        public virtual DbSet<Collection> Collections { get; set; }
+        public virtual DbSet<CollectionPage> CollectionPages { get; set; }
+        public virtual DbSet<Artist> Artists { get; set; }
     }
 }

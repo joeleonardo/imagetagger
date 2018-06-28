@@ -54,15 +54,15 @@ namespace ImageReviewer
             Image image;
             try
             {
-                image = dbContext.Image.Single(t => t.FileName == name);
+                image = dbContext.Images.Single(t => t.File_Name == name);
             }
             catch
             {
                 Image newImage = new Image();
-                newImage.FileName = name;
-                newImage.FullPath = String.Format(@"{0}\{1}", selectedPath, name);
+                newImage.File_Name = name;
+                newImage.Full_Path = String.Format(@"{0}\{1}", selectedPath, name);
 
-                dbContext.Image.Add(newImage);
+                dbContext.Images.Add(newImage);
                 dbContext.SaveChanges();
             }
         }
@@ -75,8 +75,8 @@ namespace ImageReviewer
 
         internal int CreateNewTag(string text)
         {
-            Tag tag = new Tag { TagName = text };
-            dbContext.Tag.Add(tag);
+            Tag tag = new Tag { Name = text };
+            dbContext.Tags.Add(tag);
             dbContext.SaveChanges();
 
             this.Log(String.Format("Created tag #{0}: {1}", tag.Id, text), Utilities.LoggingLevels.Information);
@@ -88,8 +88,8 @@ namespace ImageReviewer
         {
             try
             {
-                var image = dbContext.Image.Single(t => t.FullPath == text);
-                this.Log(String.Format("Loaded image ID #{0}: {1}", image.Id, image.FileName), Utilities.LoggingLevels.Information);
+                var image = dbContext.Images.Single(t => t.Full_Path == text);
+                this.Log(String.Format("Loaded image ID #{0}: {1}", image.Id, image.File_Name), Utilities.LoggingLevels.Information);
                 return image.Id;
             }
             catch (Exception e)
@@ -106,10 +106,10 @@ namespace ImageReviewer
 
             try
             {
-                image = dbContext.Image.Single(t => t.Id == imageId);
-                tag = dbContext.Tag.Single(t => t.Id == tagId);
+                image = dbContext.Images.Single(t => t.Id == imageId);
+                tag = dbContext.Tags.Single(t => t.Id == tagId);
 
-                if (image.ImageTags.Select(t => t.Tag.TagName).Contains(tag.TagName) && image.ImageTags.Select(t => t.Image.FileName).Contains(image.FileName))
+                if (image.ImageTags.Select(t => t.Tag.Name).Contains(tag.Name) && image.ImageTags.Select(t => t.Image.File_Name).Contains(image.File_Name))
                 {
                     throw new Exception("The image tag already exists.");
                 }
@@ -130,12 +130,12 @@ namespace ImageReviewer
 
         internal List<Tag> GetTags()
         {
-            return dbContext.Tag.OrderBy(t => t.TagName).ToList();
+            return dbContext.Tags.OrderBy(t => t.Name).ToList();
         }
 
         internal List<Tag> GetTags(int imageID)
         {
-            List<ImageTag> imageTags = dbContext.ImageTag.Where(t => t.Image.Id == imageID).ToList();
+            List<ImageTag> imageTags = dbContext.ImageTags.Where(t => t.Image.Id == imageID).ToList();
             List<Tag> tags = new List<Tag>();
 
             foreach (var imageTag in imageTags)
@@ -148,14 +148,14 @@ namespace ImageReviewer
 
         internal bool CheckTagExists(string text)
         {
-            return dbContext.Tag.Select(t => t.TagName).Contains(text);
+            return dbContext.Tags.Select(t => t.Name).Contains(text);
         }
 
         internal int GetExistingTagId(string tagName)
         {
             try
             {
-                return dbContext.Tag.Single(t => t.TagName == tagName).Id;
+                return dbContext.Tags.Single(t => t.Name == tagName).Id;
             }
             catch (Exception e)
             {
@@ -169,7 +169,7 @@ namespace ImageReviewer
         {
             try
             {
-                dbContext.ImageTag.Remove(dbContext.ImageTag.Single(t => t.Image.Id == imageId && t.Tag.Id == tagId));
+                dbContext.ImageTags.Remove(dbContext.ImageTags.Single(t => t.Image.Id == imageId && t.Tag.Id == tagId));
                 dbContext.SaveChanges();
                 return true;
             }
@@ -184,7 +184,7 @@ namespace ImageReviewer
         {
             try
             {
-                return dbContext.Tag.First(t => t.TagName.StartsWith(text)).TagName;
+                return dbContext.Tags.First(t => t.Name.StartsWith(text)).Name;
             }
             catch
             {
@@ -198,8 +198,8 @@ namespace ImageReviewer
 
             foreach (string item in items)
             {
-                var tag = dbContext.Tag.Single(x => x.TagName == item);
-                var results = dbContext.ImageTag.Where(x => x.Tag.Id == tag.Id).Select(y => y.Image.FullPath).ToList();
+                var tag = dbContext.Tags.Single(x => x.Name == item);
+                var results = dbContext.ImageTags.Where(x => x.Tag.Id == tag.Id).Select(y => y.Image.Full_Path).ToList();
 
                 if (set.Count() == 0)
                 {
@@ -215,8 +215,8 @@ namespace ImageReviewer
             {
                 foreach (string item in ignoreitems)
                 {
-                    var tag = dbContext.Tag.Single(x => x.TagName == item);
-                    var results = dbContext.ImageTag.Where(x => x.Tag.Id == tag.Id).Select(y => y.Image.FullPath).ToList();
+                    var tag = dbContext.Tags.Single(x => x.Name == item);
+                    var results = dbContext.ImageTags.Where(x => x.Tag.Id == tag.Id).Select(y => y.Image.Full_Path).ToList();
 
                     if (results.Count > 0)
                     {
@@ -236,14 +236,14 @@ namespace ImageReviewer
 
         internal void DeleteExistingTag(int tagId)
         {
-            var imageTags = dbContext.ImageTag.Where(t => t.Tag.Id == tagId);
+            var imageTags = dbContext.ImageTags.Where(t => t.Tag.Id == tagId);
             
             foreach (var imageTag in imageTags)
             {
-                dbContext.ImageTag.Remove(imageTag);
+                dbContext.ImageTags.Remove(imageTag);
             }
 
-            dbContext.Tag.Remove(dbContext.Tag.Single(t => t.Id == tagId));
+            dbContext.Tags.Remove(dbContext.Tags.Single(t => t.Id == tagId));
             dbContext.SaveChanges();
         }
     }

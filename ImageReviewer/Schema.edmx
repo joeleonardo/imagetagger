@@ -10,6 +10,9 @@
     <EntitySet Name="Images" EntityType="Schema.Store.Images" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="Tags" EntityType="Schema.Store.Tags" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="ImageTags" EntityType="Schema.Store.ImageTags" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Collections" EntityType="Schema.Store.Collections" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="CollectionPages" EntityType="Schema.Store.CollectionPages" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Artists" EntityType="Schema.Store.Artists" store:Type="Tables" Schema="dbo" />
     <AssociationSet Name="ImagesImageTags" Association="Schema.Store.ImagesImageTags">
       <End Role="Images" EntitySet="Images" />
       <End Role="ImageTags" EntitySet="ImageTags" />
@@ -18,21 +21,35 @@
       <End Role="Tags" EntitySet="Tags" />
       <End Role="ImageTags" EntitySet="ImageTags" />
     </AssociationSet>
+    <AssociationSet Name="CollectionCollectionPage" Association="Schema.Store.CollectionCollectionPage">
+      <End Role="Collection" EntitySet="Collections" />
+      <End Role="CollectionPage" EntitySet="CollectionPages" />
+    </AssociationSet>
+    <AssociationSet Name="CollectionPageImage" Association="Schema.Store.CollectionPageImage">
+      <End Role="CollectionPage" EntitySet="CollectionPages" />
+      <End Role="Image" EntitySet="Images" />
+    </AssociationSet>
+    <AssociationSet Name="ArtistImage" Association="Schema.Store.ArtistImage">
+      <End Role="Artist" EntitySet="Artists" />
+      <End Role="Image" EntitySet="Images" />
+    </AssociationSet>
   </EntityContainer>
   <EntityType Name="Images">
     <Key>
       <PropertyRef Name="Id" />
     </Key>
     <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="FileName" Type="nvarchar(max)" Nullable="false" />
-    <Property Name="FullPath" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="File_Name" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Full_Path" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="CollectionPage_Id" Type="int" Nullable="true" />
+    <Property Name="Artist_Id" Type="int" Nullable="true" />
   </EntityType>
   <EntityType Name="Tags">
     <Key>
       <PropertyRef Name="Id" />
     </Key>
     <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="TagName" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Name" Type="nvarchar(max)" Nullable="false" />
   </EntityType>
   <EntityType Name="ImageTags">
     <Key>
@@ -41,6 +58,28 @@
     <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="Image_Id" Type="int" Nullable="false" />
     <Property Name="Tag_Id" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Collections">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="nvarchar(max)" Nullable="false" />
+  </EntityType>
+  <EntityType Name="CollectionPages">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Order" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Collection_Id" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Artists">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="nvarchar(max)" Nullable="false" />
   </EntityType>
   <Association Name="ImagesImageTags">
     <End Role="Images" Type="Schema.Store.Images" Multiplicity="1" />
@@ -66,21 +105,72 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <Association Name="CollectionCollectionPage">
+    <End Role="Collection" Type="Schema.Store.Collections" Multiplicity="1" />
+    <End Role="CollectionPage" Type="Schema.Store.CollectionPages" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Collection">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="CollectionPage">
+        <PropertyRef Name="Collection_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="CollectionPageImage">
+    <End Role="CollectionPage" Type="Schema.Store.CollectionPages" Multiplicity="0..1" />
+    <End Role="Image" Type="Schema.Store.Images" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="CollectionPage">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Image">
+        <PropertyRef Name="CollectionPage_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="ArtistImage">
+    <End Role="Artist" Type="Schema.Store.Artists" Multiplicity="0..1" />
+    <End Role="Image" Type="Schema.Store.Images" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Artist">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Image">
+        <PropertyRef Name="Artist_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
 </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="Schema" Alias="Self" xmlns="http://schemas.microsoft.com/ado/2009/11/edm" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation">
         <EntityContainer Name="SchemaContainer" annotation:LazyLoadingEnabled="true" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation">
-          <EntitySet Name="Image" EntityType="Schema.Image" />
-          <EntitySet Name="Tag" EntityType="Schema.Tag" />
-          <EntitySet Name="ImageTag" EntityType="Schema.ImageTag" />
+          <EntitySet Name="Images" EntityType="Schema.Image" />
+          <EntitySet Name="Tags" EntityType="Schema.Tag" />
+          <EntitySet Name="ImageTags" EntityType="Schema.ImageTag" />
           <AssociationSet Name="ImagesImageTags" Association="Schema.ImagesImageTags">
-            <End Role="Images" EntitySet="Image" />
-            <End Role="ImageTags" EntitySet="ImageTag" />
+            <End Role="Images" EntitySet="Images" />
+            <End Role="ImageTags" EntitySet="ImageTags" />
           </AssociationSet>
           <AssociationSet Name="TagsImageTags" Association="Schema.TagsImageTags">
-            <End Role="Tags" EntitySet="Tag" />
-            <End Role="ImageTags" EntitySet="ImageTag" />
+            <End Role="Tags" EntitySet="Tags" />
+            <End Role="ImageTags" EntitySet="ImageTags" />
+          </AssociationSet>
+          <EntitySet Name="Collections" EntityType="Schema.Collection" />
+          <EntitySet Name="CollectionPages" EntityType="Schema.CollectionPage" />
+          <AssociationSet Name="CollectionCollectionPage" Association="Schema.CollectionCollectionPage">
+            <End Role="Collection" EntitySet="Collections" />
+            <End Role="CollectionPage" EntitySet="CollectionPages" />
+          </AssociationSet>
+          <AssociationSet Name="CollectionPageImage" Association="Schema.CollectionPageImage">
+            <End Role="CollectionPage" EntitySet="CollectionPages" />
+            <End Role="Image" EntitySet="Images" />
+          </AssociationSet>
+          <EntitySet Name="Artists" EntityType="Schema.Artist" />
+          <AssociationSet Name="ArtistImage" Association="Schema.ArtistImage">
+            <End EntitySet="Artists" Role="Artist" />
+            <End EntitySet="Images" Role="Image" />
           </AssociationSet>
         </EntityContainer>
         <EntityType Name="Image">
@@ -88,16 +178,18 @@
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
-          <Property Name="FileName" Type="String" Nullable="false" />
-          <Property Name="FullPath" Type="String" Nullable="false" />
+          <Property Name="File_Name" Type="String" Nullable="false" />
+          <Property Name="Full_Path" Type="String" Nullable="false" />
           <NavigationProperty Name="ImageTags" Relationship="Schema.ImagesImageTags" FromRole="Images" ToRole="ImageTags" />
+          <NavigationProperty Name="CollectionPage" Relationship="Schema.CollectionPageImage" FromRole="Image" ToRole="CollectionPage" />
+          <NavigationProperty Name="Artist" Relationship="Schema.ArtistImage" FromRole="Image" ToRole="Artist" />
         </EntityType>
         <EntityType Name="Tag">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
-          <Property Name="TagName" Type="String" Nullable="false" />
+          <Property Name="Name" Type="String" Nullable="false" />
           <NavigationProperty Name="ImageTags" Relationship="Schema.TagsImageTags" FromRole="Tags" ToRole="ImageTags" />
         </EntityType>
         <EntityType Name="ImageTag">
@@ -116,6 +208,43 @@
           <End Type="Schema.Tag" Role="Tags" Multiplicity="1" />
           <End Type="Schema.ImageTag" Role="ImageTags" Multiplicity="*" />
         </Association>
+        <EntityType Name="Collection">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" />
+          <NavigationProperty Name="CollectionPages" Relationship="Schema.CollectionCollectionPage" FromRole="Collection" ToRole="CollectionPage" />
+        </EntityType>
+        <EntityType Name="CollectionPage">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Order" Type="String" Nullable="false" />
+          <NavigationProperty Name="Collection" Relationship="Schema.CollectionCollectionPage" FromRole="CollectionPage" ToRole="Collection" />
+          <NavigationProperty Name="Images" Relationship="Schema.CollectionPageImage" FromRole="CollectionPage" ToRole="Image" />
+        </EntityType>
+        <Association Name="CollectionCollectionPage">
+          <End Type="Schema.Collection" Role="Collection" Multiplicity="1" />
+          <End Type="Schema.CollectionPage" Role="CollectionPage" Multiplicity="*" />
+        </Association>
+        <Association Name="CollectionPageImage">
+          <End Type="Schema.CollectionPage" Role="CollectionPage" Multiplicity="0..1" />
+          <End Type="Schema.Image" Role="Image" Multiplicity="*" />
+        </Association>
+        <EntityType Name="Artist">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" />
+          <NavigationProperty Name="Images" Relationship="Schema.ArtistImage" FromRole="Artist" ToRole="Image" />
+        </EntityType>
+        <Association Name="ArtistImage">
+          <End Type="Schema.Artist" Multiplicity="0..1" Role="Artist" />
+          <End Type="Schema.Image" Multiplicity="*" Role="Image" />
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -123,27 +252,51 @@
       
     <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
   <EntityContainerMapping StorageEntityContainer="SchemaStoreContainer" CdmEntityContainer="SchemaContainer">
-    <EntitySetMapping Name="Image">
+    <EntitySetMapping Name="Images">
       <EntityTypeMapping TypeName="IsTypeOf(Schema.Image)">
         <MappingFragment StoreEntitySet="Images">
           <ScalarProperty Name="Id" ColumnName="Id" />
-          <ScalarProperty Name="FileName" ColumnName="FileName" />
-          <ScalarProperty Name="FullPath" ColumnName="FullPath" />
+          <ScalarProperty Name="File_Name" ColumnName="File_Name" />
+          <ScalarProperty Name="Full_Path" ColumnName="Full_Path" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="Tag">
+    <EntitySetMapping Name="Tags">
       <EntityTypeMapping TypeName="IsTypeOf(Schema.Tag)">
         <MappingFragment StoreEntitySet="Tags">
           <ScalarProperty Name="Id" ColumnName="Id" />
-          <ScalarProperty Name="TagName" ColumnName="TagName" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="ImageTag">
+    <EntitySetMapping Name="ImageTags">
       <EntityTypeMapping TypeName="IsTypeOf(Schema.ImageTag)">
         <MappingFragment StoreEntitySet="ImageTags">
           <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Collections">
+      <EntityTypeMapping TypeName="IsTypeOf(Schema.Collection)">
+        <MappingFragment StoreEntitySet="Collections">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="CollectionPages">
+      <EntityTypeMapping TypeName="IsTypeOf(Schema.CollectionPage)">
+        <MappingFragment StoreEntitySet="CollectionPages">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Order" ColumnName="Order" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Artists">
+      <EntityTypeMapping TypeName="IsTypeOf(Schema.Artist)">
+        <MappingFragment StoreEntitySet="Artists">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
@@ -162,6 +315,32 @@
       <EndProperty Name="ImageTags">
         <ScalarProperty Name="Id" ColumnName="Id" />
       </EndProperty>
+    </AssociationSetMapping>
+    <AssociationSetMapping Name="CollectionCollectionPage" TypeName="Schema.CollectionCollectionPage" StoreEntitySet="CollectionPages">
+      <EndProperty Name="Collection">
+        <ScalarProperty Name="Id" ColumnName="Collection_Id" />
+      </EndProperty>
+      <EndProperty Name="CollectionPage">
+        <ScalarProperty Name="Id" ColumnName="Id" />
+      </EndProperty>
+    </AssociationSetMapping>
+    <AssociationSetMapping Name="CollectionPageImage" TypeName="Schema.CollectionPageImage" StoreEntitySet="Images">
+      <EndProperty Name="CollectionPage">
+        <ScalarProperty Name="Id" ColumnName="CollectionPage_Id" />
+      </EndProperty>
+      <EndProperty Name="Image">
+        <ScalarProperty Name="Id" ColumnName="Id" />
+      </EndProperty>
+      <Condition ColumnName="CollectionPage_Id" IsNull="false" />
+    </AssociationSetMapping>
+    <AssociationSetMapping Name="ArtistImage" TypeName="Schema.ArtistImage" StoreEntitySet="Images">
+      <EndProperty Name="Artist">
+        <ScalarProperty Name="Id" ColumnName="Artist_Id" />
+      </EndProperty>
+      <EndProperty Name="Image">
+        <ScalarProperty Name="Id" ColumnName="Id" />
+      </EndProperty>
+      <Condition ColumnName="Artist_Id" IsNull="false" />
     </AssociationSetMapping>
   </EntityContainerMapping>
 </Mapping></edmx:Mappings>

@@ -144,7 +144,7 @@ namespace ImageReviewer
             
             foreach (var t in tags)
             {
-                this.list_tag_pool.Items.Add(t.TagName);
+                this.list_tag_pool.Items.Add(t.Name);
             }
         }
 
@@ -155,7 +155,7 @@ namespace ImageReviewer
 
             foreach (var t in tags)
             {
-                this.list_image_tags.Items.Add(t.TagName);
+                this.list_image_tags.Items.Add(t.Name);
             }
         }
 
@@ -192,11 +192,12 @@ namespace ImageReviewer
         private void list_tag_pool_Loaded(object sender, RoutedEventArgs e)
         {
             var listbox = (ListBox)sender;
+            listbox.Items.Clear();
 
             var tags = Utils.GetTags();
             foreach (var tag in tags)
             {
-                listbox.Items.Add(tag.TagName);
+                listbox.Items.Add(tag.Name);
             }
         }
 
@@ -260,11 +261,12 @@ namespace ImageReviewer
         private void review_lb_select_tags_Loaded(object sender, RoutedEventArgs e)
         {
             var listbox = (ListBox)sender;
+            listbox.Items.Clear();
 
             var tags = Utils.GetTags();
             foreach (var tag in tags)
             {
-                listbox.Items.Add(tag.TagName);
+                listbox.Items.Add(tag.Name);
             }
         }
 
@@ -340,7 +342,7 @@ namespace ImageReviewer
                 this.review_lb_selected_image_tags.Items.Clear();
                 foreach (var tag in tags)
                 {
-                    this.review_lb_selected_image_tags.Items.Add(tag.TagName);
+                    this.review_lb_selected_image_tags.Items.Add(tag.Name);
                 }
             }
             catch (Exception exc)
@@ -355,7 +357,7 @@ namespace ImageReviewer
             var tags = Utils.GetTags();
             foreach (var tag in tags)
             {
-                this.review_lb_select_tags.Items.Add(tag.TagName);
+                this.review_lb_select_tags.Items.Add(tag.Name);
             }
 
             this.review_lb_applied_tags.Items.Clear();

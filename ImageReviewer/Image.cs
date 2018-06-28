@@ -21,10 +21,12 @@ namespace ImageReviewer
         }
     
         public int Id { get; set; }
-        public string FileName { get; set; }
-        public string FullPath { get; set; }
+        public string File_Name { get; set; }
+        public string Full_Path { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ImageTag> ImageTags { get; set; }
+        public virtual CollectionPage CollectionPage { get; set; }
+        public virtual Artist Artist { get; set; }
     }
 }
