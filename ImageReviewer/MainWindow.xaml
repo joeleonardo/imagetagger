@@ -45,22 +45,23 @@
             <TabItem Header="Review">
                 <Grid Background="#FFE5E5E5">
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="300"/>
-                        <ColumnDefinition Width="300"/>
+                        <ColumnDefinition Width="450"/>
                         <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
-                    <Label Content="Select / Add Tags" HorizontalAlignment="Left" Margin="10,74,0,0" VerticalAlignment="Top" Height="26" Width="100"/>
-                    <ListBox x:Name="review_lb_select_tags" HorizontalAlignment="Left" Height="100" Margin="10,100,0,0" VerticalAlignment="Top" Width="280" Loaded="review_lb_select_tags_Loaded" SelectionChanged="review_lb_select_tags_SelectionChanged"/>
+                    <Label Content="Select / Add Tags" HorizontalAlignment="Left" Margin="10,44,0,0" VerticalAlignment="Top" Height="26" Width="100"/>
+                    <ListBox x:Name="review_lb_select_tags" HorizontalAlignment="Left" Height="100" Margin="10,100,0,0" VerticalAlignment="Top" Width="285" Loaded="review_lb_select_tags_Loaded" SelectionChanged="review_lb_select_tags_SelectionChanged"/>
                     <Label Content="Applied Tags" HorizontalAlignment="Left" Margin="10,205,0,0" VerticalAlignment="Top" Height="26" Width="77"/>
                     <Label Content="File List" HorizontalAlignment="Left" Margin="10,436,0,0" VerticalAlignment="Top" Height="26" Width="49"/>
                     <ListBox x:Name="review_lb_file_list" HorizontalAlignment="Left" Height="300" Margin="10,462,0,0" VerticalAlignment="Top" Width="280" SelectionChanged="review_lb_file_list_SelectionChanged"/>
-                    <Image x:Name="review_image" Grid.Column="2" HorizontalAlignment="Left" Height="821" Margin="14,10,-3,0" VerticalAlignment="Top" Width="977"/>
-                    <ListBox x:Name="review_lb_applied_tags" HorizontalAlignment="Left" Height="200" Margin="10,231,0,0" VerticalAlignment="Top" Width="280" Loaded="review_lb_applied_tags_Loaded" MouseLeftButtonUp="review_lb_applied_tags_MouseLeftButtonUp"/>
+                    <Image x:Name="review_image" Grid.Column="1" HorizontalAlignment="Left" Height="821" Margin="14,10,-5,0" VerticalAlignment="Top" Width="977"/>
+                    <ListBox x:Name="review_lb_applied_tags" Height="200" Margin="10,231,0,0" VerticalAlignment="Top" Loaded="review_lb_applied_tags_Loaded" MouseLeftButtonUp="review_lb_applied_tags_MouseLeftButtonUp" HorizontalAlignment="Left" Width="137"/>
                     <Button x:Name="review_btn_clear" Content="Clear" HorizontalAlignment="Left" Height="64" Margin="10,767,0,0" VerticalAlignment="Top" Width="280" Click="review_btn_clear_Click"/>
-                    <ListBox x:Name="review_lb_selected_image_tags" Grid.Column="1" HorizontalAlignment="Left" Height="200" Margin="10,231,0,0" VerticalAlignment="Top" Width="280"/>
-                    <Label Content="Selected Image Tags" Grid.Column="1" HorizontalAlignment="Left" Margin="10,205,0,0" VerticalAlignment="Top"/>
-                    <Label Content="Search for Tags" HorizontalAlignment="Left" Margin="10,43,0,0" VerticalAlignment="Top"/>
-                    <TextBox HorizontalAlignment="Left" Height="19" Margin="110,47,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="180"/>
+                    <ListBox x:Name="review_lb_selected_image_tags" Height="200" Margin="303,231,0,0" VerticalAlignment="Top" MouseLeftButtonUp="review_lb_selected_image_tags_MouseLeftButtonUp" HorizontalAlignment="Left" Width="137"/>
+                    <Label Content="Selected Image Tags" HorizontalAlignment="Left" Margin="303,205,0,0" VerticalAlignment="Top" Height="26" Width="118"/>
+                    <TextBox HorizontalAlignment="Left" Height="19" Margin="63,76,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="232"/>
+                    <ListBox x:Name="review_lb_ignore_tags" Height="200" Margin="155,231,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Width="139" Loaded="review_lb_ignore_tags_Loaded" MouseLeftButtonUp="review_lb_ignore_tags_MouseLeftButtonUp"/>
+                    <Label Content="Ignore Tags" HorizontalAlignment="Left" Margin="155,205,0,0" VerticalAlignment="Top" Width="105"/>
+                    <Label Content="Search:" HorizontalAlignment="Left" Margin="10,72,0,0" VerticalAlignment="Top"/>
                 </Grid>
             </TabItem>
         </TabControl>

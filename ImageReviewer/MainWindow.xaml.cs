@@ -161,16 +161,31 @@ namespace ImageReviewer
 
         private void list_tag_pool_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
-            if (Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl))
-            {
-                System.Windows.Controls.ListBox listBox = (System.Windows.Controls.ListBox)sender;
-                string tagName = (string) listBox.SelectedValue;
+            ListBox listBox = (ListBox)sender;
+            if (listBox.SelectedIndex == -1) { return; }
 
+            if (Keyboard.Modifiers == ModifierKeys.Control)
+            {                
+                string tagName = (string) listBox.SelectedValue;
                 int tagId = Utils.GetExistingTagId(tagName);
                 int imageId = Utils.GetExistingImageId(String.Format(@"{0}\{1}", this.SelectedPath, this.list_files.SelectedItem.ToString()));
 
                 Utils.AddImageTag(tagId, imageId);
                 this.refresh_image_tag_list(imageId);
+            }
+            else if (Keyboard.Modifiers == ModifierKeys.Shift)
+            {
+                string tagName = (string)listBox.SelectedValue;
+                int tagId = Utils.GetExistingTagId(tagName);
+
+                var mbox = MessageBox.Show(
+                    String.Format("Are you sure you want to delete tag: {0}", tagName), "Confirm Delete", MessageBoxButton.OKCancel);
+
+                if (mbox == MessageBoxResult.OK)
+                {
+                    Utils.DeleteExistingTag(tagId);
+                    listBox.Items.RemoveAt(listBox.SelectedIndex);
+                }
             }
         }
 
@@ -261,7 +276,7 @@ namespace ImageReviewer
 
         private void review_lb_applied_tags_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
-            List<string> files = Utils.GetMatchingFileList((ItemCollection)sender);
+            List<string> files = Utils.GetMatchingFileList(this.review_lb_applied_tags.Items, this.review_lb_ignore_tags.Items);
 
             this.review_lb_file_list.Items.Clear();
 
@@ -275,7 +290,7 @@ namespace ImageReviewer
 
         private void review_lb_select_tags_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl))
+            if (Keyboard.Modifiers == ModifierKeys.Control)
             {
                 ListBox listBox = ((ListBox)sender);
 
@@ -287,16 +302,29 @@ namespace ImageReviewer
                     this.review_lb_applied_tags.Items.Add((string)tagName);
                 }
             }
+            else if (Keyboard.Modifiers == ModifierKeys.Shift)
+            {
+                ListBox listBox = ((ListBox)sender);
+
+                if (listBox.SelectedIndex == -1) { return; }
+                string tagName = (string)listBox.SelectedValue;
+
+                if (!this.review_lb_applied_tags.Items.Contains(tagName))
+                {
+                    this.review_lb_ignore_tags.Items.Add((string)tagName);
+                }
+            }
+
         }
 
         private void review_lb_file_list_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            ListBox listBox = (ListBox)sender;
+        {            
             try
             {
-                var file = listBox.SelectedItem.ToString();
+                ListBox listBox = (ListBox)sender;
 
-                if (file is null) { return; }
+                var file = listBox.SelectedItem.ToString();
+                if (file == String.Empty) { return; }
 
                 if (bitmapImage != null) { bitmapImage = null; }
                 bitmapImage = new BitmapImage(new Uri(file));
@@ -332,16 +360,75 @@ namespace ImageReviewer
 
             this.review_lb_applied_tags.Items.Clear();
             this.review_lb_selected_image_tags.Items.Clear();
+            this.review_lb_ignore_tags.Items.Clear();
             this.review_image.Source = null;
         }
 
         private void review_lb_applied_tags_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
-            if (Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl))
+            if (Keyboard.Modifiers == ModifierKeys.Shift)
             {
                 System.Windows.Controls.ListBox listBox = (System.Windows.Controls.ListBox)sender;
                 if (listBox.SelectedIndex == -1) { return; }
                 listBox.Items.RemoveAt(listBox.SelectedIndex);
+            }
+        }
+
+        private void review_lb_selected_image_tags_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            if (Keyboard.Modifiers == ModifierKeys.Control)
+            {
+                System.Windows.Controls.ListBox listBox = (System.Windows.Controls.ListBox)sender;
+                if (listBox.SelectedIndex == -1) { return; }
+
+                var tagname = listBox.SelectedValue;
+
+                if (!this.review_lb_applied_tags.Items.Contains(tagname))
+                {
+                    this.review_lb_applied_tags.Items.Add(tagname);
+                }
+            }
+            else if (Keyboard.Modifiers == ModifierKeys.Shift)
+            {
+                System.Windows.Controls.ListBox listBox = (System.Windows.Controls.ListBox)sender;
+                if (listBox.SelectedIndex == -1) { return; }
+
+                var tagname = listBox.SelectedValue;
+
+                if (!this.review_lb_ignore_tags.Items.Contains(tagname))
+                {
+                    this.review_lb_ignore_tags.Items.Add(tagname);
+                }
+            }
+        }
+
+        private void review_lb_ignore_tags_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            if(Keyboard.Modifiers == ModifierKeys.Shift)
+            {
+                System.Windows.Controls.ListBox listBox = (System.Windows.Controls.ListBox)sender;
+                if (listBox.SelectedIndex == -1) { return; }
+                listBox.Items.RemoveAt(listBox.SelectedIndex);
+            }
+        }
+
+        private void review_lb_ignore_tags_Loaded(object sender, RoutedEventArgs e)
+        {
+            var lb = (ListBox)sender;
+            ((INotifyCollectionChanged)lb.Items).CollectionChanged += review_lb_ignore_tags_CollectionChanged;
+        }
+
+        private void review_lb_ignore_tags_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            List<string> files = Utils.GetMatchingFileList(this.review_lb_applied_tags.Items, this.review_lb_ignore_tags.Items);
+
+            this.review_lb_file_list.Items.Clear();
+
+            if (files.Count == 0) { return; }
+
+            foreach (var file in files)
+            {
+                this.review_lb_file_list.Items.Add(file);
             }
         }
     }

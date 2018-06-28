@@ -192,20 +192,14 @@ namespace ImageReviewer
             }
         }
 
-        internal List<string> GetMatchingFileList(ItemCollection items)
+        internal List<string> GetMatchingFileList(ItemCollection items, ItemCollection ignoreitems)
         {
-            IEnumerable<string> set = new List<string>();
-            
-            // Query for each tag individually
-            // Intersect all sets
+            IEnumerable<string> set = new List<string>();           
 
             foreach (string item in items)
             {
                 var tag = dbContext.Tag.Single(x => x.TagName == item);
                 var results = dbContext.ImageTag.Where(x => x.Tag.Id == tag.Id).Select(y => y.Image.FullPath).ToList();
-
-                //set.AddRange(results);
-                //set = set.Distinct().ToList();
 
                 if (set.Count() == 0)
                 {
@@ -213,11 +207,44 @@ namespace ImageReviewer
                 }
                 else
                 {
-                    set = results.Intersect(set);
+                    set = results.Intersect(set).ToList();
+                }
+            }
+
+            if (ignoreitems.Count > 0)
+            {
+                foreach (string item in ignoreitems)
+                {
+                    var tag = dbContext.Tag.Single(x => x.TagName == item);
+                    var results = dbContext.ImageTag.Where(x => x.Tag.Id == tag.Id).Select(y => y.Image.FullPath).ToList();
+
+                    if (results.Count > 0)
+                    {
+                        foreach (var result in results)
+                        {
+                            if (set.Contains(result))
+                            {
+                                ((List<string>)set).Remove(result);
+                            }
+                        }
+                    }
                 }
             }
 
             return set.ToList();
+        }
+
+        internal void DeleteExistingTag(int tagId)
+        {
+            var imageTags = dbContext.ImageTag.Where(t => t.Tag.Id == tagId);
+            
+            foreach (var imageTag in imageTags)
+            {
+                dbContext.ImageTag.Remove(imageTag);
+            }
+
+            dbContext.Tag.Remove(dbContext.Tag.Single(t => t.Id == tagId));
+            dbContext.SaveChanges();
         }
     }
 }
