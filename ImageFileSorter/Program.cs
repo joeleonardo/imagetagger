@@ -83,7 +83,7 @@ namespace ImageFileSorter
                 }
                 catch (Exception e)
                 {
-                    Console.WriteLine("There was an error opening file: {0}", file);
+                    Console.WriteLine("There was an error processing file: {0}", file);
                     Console.WriteLine("{0}", e.Message);
                     continue;
                 }                                        
@@ -133,7 +133,8 @@ namespace ImageFileSorter
         {
             try
             {
-                fileInfo.MoveTo(String.Format(@"{0}\{1}", videoDirInfoOrganized.FullName, fileInfo.Name));
+                fileInfo.CopyTo(String.Format(@"{0}\{1}", videoDirInfoOrganized.FullName, fileInfo.Name), true);
+                fileInfo.Delete();
             }
             catch
             {

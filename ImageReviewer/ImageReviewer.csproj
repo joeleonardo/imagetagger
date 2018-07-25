@@ -218,13 +218,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Database.mdf">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Database_log.ldf">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <DependentUpon>Database.mdf</DependentUpon>
-    </Content>
     <Resource Include="if_Food_C207_2427857.ico" />
     <Content Include="Schema.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
