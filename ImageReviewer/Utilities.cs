@@ -246,5 +246,35 @@ namespace ImageReviewer
             dbContext.Tags.Remove(dbContext.Tags.Single(t => t.Id == tagId));
             dbContext.SaveChanges();
         }
+
+        internal bool CheckArtistExists(string text, out int id)
+        {
+            try
+            {
+                id = dbContext.Artists.Single(t => t.Name.Equals(text)).Id;
+                return true;
+            }
+            catch
+            {
+                id = -1;
+                return false;
+            }
+        }
+
+        internal void AddArtist(string text, out int artistId)
+        {
+            try
+            {
+                var artist = dbContext.Artists.Create();
+                artist.Name = text;
+                dbContext.Artists.Add(artist);
+                dbContext.SaveChanges();
+                artistId = artist.Id;
+            }
+            catch
+            {
+                artistId = -1;
+            }
+        }
     }
 }

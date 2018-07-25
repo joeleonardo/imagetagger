@@ -1,9 +1,10 @@
-﻿<Window x:Class="ImageReviewer.MainWindow"
+﻿<Window
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:behaviors="clr-namespace:WPFTextBoxAutoComplete;assembly=WPFTextBoxAutoComplete"
+        xmlns:local="clr-namespace:ImageReviewer" x:Class="ImageReviewer.MainWindow"
         mc:Ignorable="d"
         Title="Tag-O-Matic" Height="900" Width="1600" SizeToContent="WidthAndHeight"
         Loaded="Window_Loaded" SizeChanged="Window_SizeChanged" Icon="if_Food_C207_2427857.ico">
@@ -28,7 +29,7 @@
                         <Label Content="Select file:" HorizontalAlignment="Left" Margin="10,61,0,0" VerticalAlignment="Top" Width="134" Height="26"/>
                         <Button x:Name="btn_src_folder" Content="Choose Source Folder" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="134" Click="btn_select_folder_click" Height="20"/>
                         <ProgressBar Margin="0,10,12,10" Grid.Row="1" Background="White" HorizontalAlignment="Right" Width="580"/>
-                        <TabControl HorizontalAlignment="Left" Height="369" Margin="10,241,0,0" VerticalAlignment="Top" Width="580" SelectionChanged="TabControl_SelectionChanged">
+                        <TabControl HorizontalAlignment="Left" Height="369" Margin="10,241,0,0" VerticalAlignment="Top" Width="580">
                             <TabItem Header="Tags">
                                 <Grid Background="#FFE5E5E5">
                                     <ListBox x:Name="list_image_tags" HorizontalAlignment="Left" Height="240" Margin="10,76,0,0" VerticalAlignment="Top" Width="269" MouseLeftButtonUp="list_image_tags_MouseLeftButtonUp" />
@@ -42,7 +43,14 @@
                                 </Grid>
                             </TabItem>
                             <TabItem Header="Artist">
-                                <Grid Background="#FFE5E5E5" />
+                                <Grid Background="#FFE5E5E5" >
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="50*"/>
+                                        <ColumnDefinition Width="50*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <ComboBox x:Name="tagging_cb_artist" HorizontalAlignment="Left" Margin="57,12,0,0" VerticalAlignment="Top" Width="220" IsEditable="True" KeyUp="tagging_cb_artist_KeyUp" Loaded="tagging_cb_artist_Loaded"/>
+                                    <Label Content="Name" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
+                                </Grid>
                             </TabItem>
                             <TabItem Header="Collections">
                                 <Grid Background="#FFE5E5E5"/>
@@ -57,20 +65,39 @@
                         <ColumnDefinition Width="450"/>
                         <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
-                    <Label Content="Select / Add Tags" HorizontalAlignment="Left" Margin="10,44,0,0" VerticalAlignment="Top" Height="26" Width="100"/>
-                    <ListBox x:Name="review_lb_select_tags" HorizontalAlignment="Left" Height="100" Margin="10,100,0,0" VerticalAlignment="Top" Width="285" Loaded="review_lb_select_tags_Loaded" SelectionChanged="review_lb_select_tags_SelectionChanged"/>
-                    <Label Content="File List" HorizontalAlignment="Left" Margin="10,455,0,0" VerticalAlignment="Top" Height="26" Width="49"/>
-                    <ListBox x:Name="review_lb_file_list" HorizontalAlignment="Left" Height="281" Margin="10,481,0,0" VerticalAlignment="Top" Width="280" SelectionChanged="review_lb_file_list_SelectionChanged"/>
-                    <Image x:Name="review_image" Grid.Column="1" HorizontalAlignment="Left" Height="821" Margin="14,10,-5,0" VerticalAlignment="Top" Width="977"/>
-                    <Button x:Name="review_btn_clear" Content="Clear" HorizontalAlignment="Left" Height="64" Margin="10,767,0,0" VerticalAlignment="Top" Width="280" Click="review_btn_clear_Click"/>
-                    <TextBox HorizontalAlignment="Left" Height="19" Margin="63,76,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="232"/>
-                    <Label Content="Search:" HorizontalAlignment="Left" Margin="10,72,0,0" VerticalAlignment="Top"/>
-                    <Label Content="Applied Tags" HorizontalAlignment="Left" Margin="10,224,0,0" VerticalAlignment="Top" Height="26" Width="77"/>
-                    <ListBox x:Name="review_lb_applied_tags" Height="200" Margin="10,250,0,0" VerticalAlignment="Top" Loaded="review_lb_applied_tags_Loaded" MouseLeftButtonUp="review_lb_applied_tags_MouseLeftButtonUp" HorizontalAlignment="Left" Width="120"/>
-                    <ListBox x:Name="review_lb_selected_image_tags" Height="200" Margin="320,250,0,0" VerticalAlignment="Top" MouseLeftButtonUp="review_lb_selected_image_tags_MouseLeftButtonUp" HorizontalAlignment="Left" Width="120"/>
-                    <Label Content="Selected Image Tags" HorizontalAlignment="Left" Margin="320,224,0,0" VerticalAlignment="Top" Height="26" Width="118"/>
-                    <ListBox x:Name="review_lb_ignore_tags" Height="200" Margin="167,250,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Width="120" Loaded="review_lb_ignore_tags_Loaded" MouseLeftButtonUp="review_lb_ignore_tags_MouseLeftButtonUp"/>
-                    <Label Content="Ignore Tags" HorizontalAlignment="Left" Margin="167,224,0,0" VerticalAlignment="Top" Width="105"/>
+                    <Image x:Name="review_image" Grid.Column="1" HorizontalAlignment="Left" Height="821" Margin="14,10,0,0" VerticalAlignment="Top" Width="1112"/>
+                    <Grid HorizontalAlignment="Left" Height="376" Margin="10,455,0,0" VerticalAlignment="Top" Width="430">
+                        <ListBox x:Name="review_lb_file_list" HorizontalAlignment="Left" Height="281" Margin="10,26,0,0" VerticalAlignment="Top" Width="410" SelectionChanged="review_lb_file_list_SelectionChanged"/>
+                        <Label Content="File List" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Top" Height="26" Width="49"/>
+                        <Button x:Name="review_btn_clear" Content="Clear" HorizontalAlignment="Left" Height="54" Margin="10,312,0,0" VerticalAlignment="Top" Width="410" Click="review_btn_clear_Click"/>
+                    </Grid>
+                    <TabControl HorizontalAlignment="Left" Height="440" Margin="10,10,0,0" VerticalAlignment="Top" Width="430">
+                        <TabItem Header="Tags">
+                            <Grid Background="#FFE5E5E5">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="33*"/>
+                                    <ColumnDefinition Width="34*"/>
+                                    <ColumnDefinition Width="33*"/>
+                                </Grid.ColumnDefinitions>
+                                <Label Content="Select / Add Tags" HorizontalAlignment="Left" Margin="10,3,0,0" VerticalAlignment="Top" Height="25" Width="102"/>
+                                <ListBox x:Name="review_lb_select_tags" HorizontalAlignment="Left" Height="97" Margin="10,59,0,0" VerticalAlignment="Top" Width="404" Loaded="review_lb_select_tags_Loaded" SelectionChanged="review_lb_select_tags_SelectionChanged" Grid.ColumnSpan="3"/>
+                                <TextBox HorizontalAlignment="Left" Height="19" Margin="58,33,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="356" Grid.ColumnSpan="3"/>
+                                <Label Content="Search:" HorizontalAlignment="Left" Margin="10,28,0,0" VerticalAlignment="Top" Height="26" Width="49"/>
+                                <Label Content="Applied Tags" HorizontalAlignment="Left" Margin="10,165,0,0" VerticalAlignment="Top" Height="29" Width="79"/>
+                                <ListBox x:Name="review_lb_applied_tags" Height="212" Margin="10,190,0,0" VerticalAlignment="Top" Loaded="review_lb_applied_tags_Loaded" MouseLeftButtonUp="review_lb_applied_tags_MouseLeftButtonUp" HorizontalAlignment="Left" Width="120"/>
+                                <ListBox x:Name="review_lb_selected_image_tags" Height="212" Margin="10,190,0,0" VerticalAlignment="Top" MouseLeftButtonUp="review_lb_selected_image_tags_MouseLeftButtonUp" HorizontalAlignment="Left" Width="120" Grid.Column="2"/>
+                                <Label Content="Selected Image Tags" HorizontalAlignment="Left" Margin="10,165,0,0" VerticalAlignment="Top" Height="29" Width="121" Grid.Column="2"/>
+                                <ListBox x:Name="review_lb_ignore_tags" Height="212" Margin="10,190,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Width="124" Loaded="review_lb_ignore_tags_Loaded" MouseLeftButtonUp="review_lb_ignore_tags_MouseLeftButtonUp" Grid.Column="1"/>
+                                <Label Content="Ignore Tags" HorizontalAlignment="Left" Margin="10,165,0,0" VerticalAlignment="Top" Width="108" Height="29" Grid.Column="1"/>
+                            </Grid>
+                        </TabItem>
+                        <TabItem Header="Artist">
+                            <Grid Background="#FFE5E5E5"/>
+                        </TabItem>
+                        <TabItem Header="Collections">
+                            <Grid Background="#FFE5E5E5" />
+                        </TabItem>
+                    </TabControl>
                 </Grid>
             </TabItem>
         </TabControl>

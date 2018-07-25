@@ -433,5 +433,27 @@ namespace ImageReviewer
                 this.review_lb_file_list.Items.Add(file);
             }
         }
+
+        private void tagging_cb_artist_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter && Keyboard.Modifiers == ModifierKeys.Control)
+            {                
+                if (!Utils.CheckArtistExists(tagging_cb_artist.Text, out int artistId))
+                {
+                    Utils.AddArtist(tagging_cb_artist.Text, out artistId);
+                    tagging_cb_artist.Text = "";
+                    tagging_cb_artist.SelectedItem = artistId;
+                }
+                else
+                {
+                    tagging_cb_artist.SelectedItem = artistId;
+                }
+            }
+        }
+
+        private void tagging_cb_artist_Loaded(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }
